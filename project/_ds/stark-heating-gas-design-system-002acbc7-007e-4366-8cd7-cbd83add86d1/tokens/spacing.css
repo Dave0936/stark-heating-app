@@ -1,0 +1,26 @@
+:root{
+  --container-max:1366px;      /* content max width */
+  --container-pad:20px;        /* inner gutter */
+  --page-gutter:106px;         /* side padding at 1578 frame */
+  --header-height:110px;
+  --section-pad-y:70px;        /* about + reviews bands */
+  --grid-gap:40px;             /* advice cards */
+  --button-gap:10px;           /* sibling CTAs */
+  --button-pad:12px 22px;
+  --button-height:47px;
+  --nav-pad:14.5px 20px 14.7px 20px;
+  --dropdown-item-height:48px;
+
+  /* Radii — the site is square-cornered; radii exist only in the Google widget */
+  --radius-none:0;
+  --radius-xs:2px;             /* rating badge */
+  --radius-pill-btn:8px;       /* "See all reviews" */
+  --radius-review-card:12px;
+  --radius-round:50%;
+
+  /* Shadows (widget only) */
+  --shadow-widget:0px 0px 2px 0px rgba(0,0,0,0.12),0px 2px 4px 0px rgba(0,0,0,0.24);
+  --shadow-widget-hover:0px 0px 2px 0px rgba(0,0,0,0.12),0px 3px 5px 0px rgba(0,0,0,0.24);
+  --shadow-badge:0px 2px 5px 0px rgba(0,0,0,0.26);
+  --shadow-arrow:0px 2px 6px 0px rgba(0,0,0,0.15);
+}

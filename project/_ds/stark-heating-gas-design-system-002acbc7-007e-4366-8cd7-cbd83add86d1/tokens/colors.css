@@ -1,0 +1,34 @@
+/* Semantic colour aliases over the Figma variable set (fig-tokens.css) */
+:root{
+  /* Brand */
+  --stark-red:var(--color-red-41);            /* rgb(189,18,46) primary CTA, card bars, social */
+  --stark-red-hover:var(--color-red-32);      /* rgb(147,16,38) */
+  --stark-blue:var(--color-azure-37);         /* rgb(2,87,189) secondary CTA, dropdown, card hover */
+  --stark-blue-hover:var(--color-azure-29);   /* rgb(0,66,147) */
+  --stark-logo-grey:var(--color-grey-25);     /* rgb(65,64,66) logotype ink */
+
+  /* Text */
+  --text-body:var(--color-grey-20);           /* rgb(51,51,51) all headings + body */
+  --text-inverse:var(--color-white-solid);
+  --text-meta:var(--color-grey-33);           /* rgb(85,85,85) */
+  --text-muted:var(--color-grey-47);          /* rgb(119,119,119) */
+  --text-link-hover:var(--stark-red);
+
+  /* Surfaces */
+  --surface-page:var(--color-white-solid);
+  --surface-alt:var(--color-grey-94);         /* rgb(239,239,239) about band */
+  --surface-dark:var(--color-grey-20);        /* rgb(51,51,51) reviews band + footer */
+  --surface-card:var(--color-grey-96-2);      /* rgb(245,245,245) review cards */
+  --surface-badge-hover:var(--color-grey-96); /* rgb(243,243,245) */
+  --border-control:var(--color-grey-80-2);    /* rgb(204,204,204) carousel arrows */
+
+  /* Review widget (third-party Google look) */
+  --review-name:var(--color-azure-42);        /* rgb(21,79,193) */
+  --review-button:var(--color-azure-52-2);    /* rgb(10,108,255) */
+  --review-button-hover:var(--color-azure-51-2); /* rgb(31,103,231) */
+  --review-star:var(--color-orange-57);       /* rgb(251,142,40) */
+  --review-accent:var(--color-green-56);      /* rgb(79,206,106) badge top bar */
+
+  /* Overlays */
+  --hero-gradient:linear-gradient(90deg,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.5) 50%,rgba(0,0,0,0) 100%); /* @kind other */
+}
