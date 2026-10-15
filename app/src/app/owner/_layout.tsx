@@ -12,7 +12,7 @@ const TABS = [
   { key: 'calendar', label: 'Calendar' },
   { key: 'more', label: 'More' },
 ];
-const TITLES = { job: 'Job', customer: 'Customer', quotes: 'Quotations', quote: 'Quotation', invoices: 'Invoices', invoice: 'Invoice', reminders: 'Service Reminders', settings: 'Settings', builder: 'New Quotation' };
+const TITLES = { job: 'Job', customer: 'Customer', quotes: 'Quotations', quote: 'Quotation', invoices: 'Invoices', invoice: 'Invoice', reminders: 'Service Reminders', settings: 'Settings', team: 'Team', builder: 'New Quotation' };
 
 export default function OwnerLayout() {
   const session = useSession();

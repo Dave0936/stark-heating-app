@@ -13,6 +13,7 @@ export default function More() {
     ['Quotations', db.quotes.length + ' total · ' + db.quotes.filter(x => x.status === 'Issued').length + ' awaiting decision', 'quotes'],
     ['Invoices & Payments', unpaid.length + ' unpaid · ' + money(balance) + ' outstanding', 'invoices'],
     ['Service Reminders', due.length + ' due within ' + rd + ' days', 'reminders'],
+    ['Team', 'Who can use the owner app', 'team'],
     ['Settings & Integrations', 'Services, reminder timing, providers', 'settings'],
   ];
   return (

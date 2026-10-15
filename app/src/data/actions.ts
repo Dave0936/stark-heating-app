@@ -88,3 +88,15 @@ export function slotTaken(db: DB, jid: string, date: string, slot: string, eng: 
 }
 
 export const defaultExpiry = () => addDays(todayIso(), 30);
+
+// ---------- team ----------
+
+export type TeamMember = { kind: 'owner' | 'invite'; email: string; name: string; is_me: boolean };
+
+export async function listTeam(): Promise<TeamMember[]> {
+  const { data, error } = await supabase.rpc('list_team');
+  if (error) throw new Error(error.message);
+  return (data ?? []) as TeamMember[];
+}
+export const inviteStaff = (email: string, name: string) => call<'added' | 'invited'>('invite_staff', { p_email: email, p_name: name });
+export const removeTeamMember = (email: string) => call('remove_team_member', { p_email: email });
