@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import { openedFromRecovery, supabase } from '../lib/supabase';
 import type { DB, Session } from './types';
 import { iso, nowStamp } from '../lib/format';
 
@@ -10,7 +10,7 @@ import { iso, nowStamp } from '../lib/format';
 // actions.ts, then `reload()` refreshes the cache. A realtime subscription
 // reloads when another device changes something.
 
-type State = { ready: boolean; db: DB; session: Session; error: string };
+type State = { ready: boolean; db: DB; session: Session; error: string; recovering: boolean };
 
 export const emptyDB = (): DB => ({
   settings: { reminderDays: 28, cats: {} },
@@ -18,10 +18,16 @@ export const emptyDB = (): DB => ({
   invoices: [], notifs: [], feed: [], reminders: [],
 });
 
-let state: State = { ready: false, db: emptyDB(), session: null, error: '' };
+let state: State = { ready: false, db: emptyDB(), session: null, error: '', recovering: openedFromRecovery };
 const listeners = new Set<() => void>();
 const emit = (patch: Partial<State>) => { state = { ...state, ...patch }; listeners.forEach(l => l()); };
 const subscribe = (l: () => void) => { listeners.add(l); return () => listeners.delete(l); };
+
+// Opening a password-reset link signs the person in with a recovery session;
+// send them to choose a new password before anything else.
+supabase.auth.onAuthStateChange(event => {
+  if (event === 'PASSWORD_RECOVERY') emit({ recovering: true });
+});
 
 /** Timestamptz → local "YYYY-MM-DDTHH:MM" (the app's stamp format). */
 const stamp = (ts: string | null | undefined) => {
@@ -139,10 +145,21 @@ export async function signIn(email: string, password: string): Promise<Session> 
   return session;
 }
 
+/** Set a new password from a reset link, then open the right app. */
+export async function setNewPassword(password: string): Promise<Session> {
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) throw new Error('That reset link has expired or was already used. Please request a new one.');
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw new Error(error.message);
+  const session = state.session ?? (await enter());
+  emit({ recovering: false });
+  return session;
+}
+
 export async function signOut() {
   unlisten();
   await supabase.auth.signOut();
-  emit({ session: null, db: emptyDB() });
+  emit({ session: null, db: emptyDB(), recovering: false });
 }
 
 export const getDB = () => state.db;
@@ -153,3 +170,4 @@ export function useStore<T>(select: (s: State) => T): T {
 export const useDB = () => useStore(s => s.db);
 export const useSession = () => useStore(s => s.session);
 export const useReady = () => useStore(s => s.ready);
+export const useRecovering = () => useStore(s => s.recovering);

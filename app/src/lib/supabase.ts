@@ -8,6 +8,16 @@ import { createClient } from '@supabase/supabase-js';
 const URL = process.env.EXPO_PUBLIC_SUPABASE_URL ?? 'https://lsodqfkzughnoayvvimj.supabase.co';
 const KEY = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? 'sb_publishable_vakV54x8bvcahJaIb8Rz3Q_LsOuqGld';
 
+// Email links land on the web app with details in the URL hash. Read it before
+// the client consumes and clears it.
+const hash = Platform.OS === 'web' && typeof window !== 'undefined' ? new URLSearchParams(window.location.hash.slice(1)) : null;
+/** The page was opened from a password-reset email. */
+export const openedFromRecovery = hash?.get('type') === 'recovery';
+/** An email link that failed (usually expired or already used). */
+export const linkError = hash?.get('error_code') === 'otp_expired'
+  ? 'That email link has expired or was already used. Please request a new one.'
+  : hash?.get('error_description')?.replace(/\+/g, ' ') ?? '';
+
 export const supabase = createClient(URL, KEY, {
   auth: {
     storage: Platform.OS === 'web' ? undefined : AsyncStorage,

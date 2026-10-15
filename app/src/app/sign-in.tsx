@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Btn, ErrorBox, Field, Input, InfoBox, LinkBtn, Logo, T } from '../components/ui';
 import { OverlayHost, toast } from '../components/overlay';
 import { signIn } from '../data/store';
-import { supabase } from '../lib/supabase';
+import { linkError, supabase } from '../lib/supabase';
 import { C } from '../theme';
 
 const EMAIL = /^\S+@\S+\.\S+$/;
@@ -17,7 +17,7 @@ export default function SignIn() {
   const insets = useSafeAreaInsets();
   const [mode, setMode] = useState<'in' | 'up'>('in');
   const [f, setF] = useState({ first: '', last: '', phone: '', email: '', pw: '' });
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState(linkError);
   const [info, setInfo] = useState('');
   const [busy, setBusy] = useState(false);
   const set = (patch: Partial<typeof f>) => { setF(x => ({ ...x, ...patch })); setErr(''); };
