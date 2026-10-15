@@ -9,6 +9,9 @@ import { supabase } from '../lib/supabase';
 import { C } from '../theme';
 
 const EMAIL = /^\S+@\S+\.\S+$/;
+/** On the web, send email links back to the site the person is using
+ *  (the address must be in Supabase's Redirect URLs list); on phones Supabase uses its Site URL. */
+const emailRedirectTo = Platform.OS === 'web' && typeof window !== 'undefined' ? window.location.origin : undefined;
 
 export default function SignIn() {
   const insets = useSafeAreaInsets();
@@ -35,7 +38,7 @@ export default function SignIn() {
       } else {
         const { data, error } = await supabase.auth.signUp({
           email, password: f.pw,
-          options: { data: { first_name: f.first.trim(), last_name: f.last.trim(), phone: f.phone.trim() } },
+          options: { emailRedirectTo, data: { first_name: f.first.trim(), last_name: f.last.trim(), phone: f.phone.trim() } },
         });
         if (error) throw new Error(error.message);
         if (data.session) {
@@ -56,7 +59,7 @@ export default function SignIn() {
   const forgot = async () => {
     const email = f.email.trim().toLowerCase();
     if (!EMAIL.test(email)) return setErr('Enter your email address first.');
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: emailRedirectTo });
     if (error) return setErr(error.message);
     toast('If that email has an account, we’ve sent a reset link.');
   };
